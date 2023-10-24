@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import './App.css';
-import {calc, fmt} from "a-calc";
+import { calc } from "a-calc";
 
 function App() {
   const [result, setResult] = useState("");
   const [displayedValue, setDisplayedValue] = useState("");
-  const [isCalculated, setIsCalculated] = useState(false);
   const [isDecimalUsed, setIsDecimalUsed] = useState(false);
   const operators = ['+', '*', '-', '/'];
 
@@ -17,9 +16,6 @@ function App() {
     if (value === '0' && displayedValue[lastIndex] === '0') {
       return;
     }
-    if (isCalculated && isNaN(value)) {
-      setResult(displayedValue);
-    }
     if (value === '.') {
       setIsDecimalUsed(true);
     }
@@ -29,10 +25,14 @@ function App() {
         return;
       }
       if (operators.includes(displayedValue[lastIndex])) {
+        if (displayedValue.length >= 2 && operators.includes(displayedValue[lastIndex-1])) {
+          return;
+        }
         if (value !== '-') {
           setDisplayedValue(displayedValue.slice(0, lastIndex) + value);
           return;
         }
+
       }
     }
     setDisplayedValue(displayedValue + value);
@@ -40,17 +40,15 @@ function App() {
 
   const equal_action = () => {
     const res = calc(displayedValue);
-    console.log(parseFloat(res) % 1 !== 0);
     setIsDecimalUsed(parseFloat(res) % 1 !== 0);
     setDisplayedValue(res);
-    setIsCalculated(true);
+    setResult(res);
   }
 
   const clear = () => {
     setIsDecimalUsed(false);
     setDisplayedValue("");
     setResult("");
-    setIsCalculated(false);
   }
 
   return (
