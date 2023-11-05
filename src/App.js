@@ -54,9 +54,9 @@ function App() {
   return (
     <div className="App">
       <div id="calculator">
-        <div id="display">
+        <div className="display">
           <div id="formula">{result || "0"}</div>
-          <div id="result">{displayedValue || "0"}</div>
+          <div id="display">{displayedValue || "0"}</div>
         </div>
         <div id="pad">
           <div id="first-row">
